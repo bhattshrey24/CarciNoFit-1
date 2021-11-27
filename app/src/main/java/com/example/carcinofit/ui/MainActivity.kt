@@ -4,22 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.carcinofit.R
-import com.example.carcinofit.api.ApiServiceInterface
-
-import com.example.carcinofit.api.repository.ApiRepository
 import com.example.carcinofit.api.viewmodel.ApiViewModel
 import com.example.carcinofit.databinding.ActivityMainBinding
 import com.example.carcinofit.other.Constants.ACTION_SHOW_TRACKING_FRAGMENT
-import com.example.carcinofit.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,20 +34,34 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        apiViewModel.post.observe(this, {// simply observing the live data so whenever it gets notified of new data it passes it to the curly bracket '{}' where we can use it
-            Log.d("Response from api", it.toString())
-        })
+        binding.floatingButton.setOnClickListener {
+            Toast.makeText(applicationContext, "Floating btn Clicked", Toast.LENGTH_LONG).show()
+        }
+
+        apiViewModel.post.observe(
+            this,
+            {// simply observing the live data so whenever it gets notified of new data it passes it to the curly bracket '{}' where we can use it
+                Log.d("Response from api", it.toString())
+            })
 
 
         val navController = navHostFragment.navController
+
 
         binding.bottomNavigationView.setupWithNavController(navController)
         navController
             .addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
-                    R.id.profileFragment, R.id.homeFragment, R.id.statisticsFragment, R.id.historyFragment ->
+                    R.id.profileFragment, R.id.homeFragment, R.id.statisticsFragment, R.id.historyFragment -> {
                         binding.bottomNavigationView.visibility = View.VISIBLE
-                    else -> binding.bottomNavigationView.visibility = View.GONE
+                        binding.bottomAppBar.visibility = View.VISIBLE
+                        binding.floatingButton.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        binding.bottomNavigationView.visibility = View.GONE
+                        binding.bottomAppBar.visibility = View.GONE
+                        binding.floatingButton.visibility = View.GONE
+                    }
                 }
             }
     }

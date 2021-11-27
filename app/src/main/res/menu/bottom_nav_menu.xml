@@ -9,6 +9,11 @@
         android:icon="@drawable/ic_clipboard"
         android:title="@string/history" />
     <item
+        android:id="@+id/placeholder"
+        android:enabled="false"
+        android:title="" />
+
+    <item
         android:id="@+id/statisticsFragment"
         android:icon="@drawable/ic_statistics"
         android:title="@string/stats" />
