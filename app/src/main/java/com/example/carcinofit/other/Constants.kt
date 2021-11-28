@@ -4,6 +4,10 @@ import android.graphics.Color
 
 object Constants {
     const val dummyURL="https://jsonplaceholder.typicode.com/"
+    const val TAG="cameraX"
+    const val FILE_NAME_FORMAT="yy-MM-dd-HH-mm-ss-SSS"
+    const val REQUEST_CODE_PERMISSIONS=123
+    val REQUIRED_PERMISSIONS=arrayOf(android.Manifest.permission.CAMERA)
 
     const val WORKOUT_DATABASE_NAME = "work_db"
     const val  REQUEST_CODE_LOCATION_PERMISSION=10

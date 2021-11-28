@@ -15,6 +15,7 @@ import com.example.carcinofit.R
 import com.example.carcinofit.api.viewmodel.ApiViewModel
 import com.example.carcinofit.databinding.ActivityMainBinding
 import com.example.carcinofit.other.Constants.ACTION_SHOW_TRACKING_FRAGMENT
+import com.example.carcinofit.ui.camera.CameraActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.floatingButton.setOnClickListener {
             Toast.makeText(applicationContext, "Floating btn Clicked", Toast.LENGTH_LONG).show()
+        val intent=Intent(this,CameraActivity::class.java)
+            startActivity(intent)
         }
 
         apiViewModel.post.observe(
