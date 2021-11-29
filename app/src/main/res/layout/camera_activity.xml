@@ -64,5 +64,32 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <ProgressBar
+            android:id="@+id/resultProgressBar"
+            android:visibility="gone"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="25dp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dummyConstraintView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+
+            <include
+                layout="@layout/camera_result"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:id="@+id/statsLayout"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

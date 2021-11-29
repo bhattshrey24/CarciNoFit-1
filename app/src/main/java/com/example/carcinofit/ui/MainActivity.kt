@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.floatingButton.setOnClickListener {
-            Toast.makeText(applicationContext, "Floating btn Clicked", Toast.LENGTH_LONG).show()
+           // Toast.makeText(applicationContext, "Floating btn Clicked", Toast.LENGTH_LONG).show()
         val intent=Intent(this,CameraActivity::class.java)
             startActivity(intent)
         }
