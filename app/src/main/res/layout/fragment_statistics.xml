@@ -46,12 +46,13 @@
                     android:text="Estimated Calories"
                     style="@style/Body1"
                     />
-        <com.github.mikephil.charting.charts.BarChart
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_marginBottom="5dp"
-            android:layout_below="@id/calorieHeading"
-            android:id="@+id/calorieChart"/>
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/calorieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_below="@id/calorieHeading"
+                    android:layout_marginBottom="5dp" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
