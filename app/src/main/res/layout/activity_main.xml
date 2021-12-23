@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_scan_svg"
             android:clickable="true"
+            android:tint="@color/disabled_primary"
             app:layout_anchor="@id/bottomAppBar" />
 
 

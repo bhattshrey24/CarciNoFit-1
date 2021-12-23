@@ -12,7 +12,6 @@ import com.example.carcinofit.R
 import com.example.carcinofit.databinding.FragmentStatisticsBinding
 import com.example.carcinofit.other.CustomAxisFormatter
 import com.example.carcinofit.ui.viewmodels.StatisticsViewModel
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition
@@ -36,15 +35,20 @@ class StatisticsFragment : Fragment() {
     ): View {
         subscribeToObservers()
         viewModel.getChartStats()
-        viewModel.initializeWeekView(binding.weekView)
         initializeDurationGraph()
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.getWeeklyWorkouts(mon = binding.weekView.monday, sun = binding.weekView.sunday)
+    }
+
     private fun subscribeToObservers() {
         viewModel.workouts.observe(viewLifecycleOwner, {
-            viewModel.updateWeekView(binding.weekView, requireContext())
+            binding.weekView.setDates(it, viewModel.getWeeklyGoal())
         })
+
         viewModel.caloriesBurned.observe(viewLifecycleOwner, {
             initializeCalorieGraph()
             val allEntries = it.indices.map { i -> BarEntry(i.toFloat(), it[i].calories.toFloat()) }
@@ -53,6 +57,7 @@ class StatisticsFragment : Fragment() {
             setLineData(allTimeEntries)
             setBarData(allEntries)
         })
+
         viewModel.totalData.observe(viewLifecycleOwner, {
             binding.headerImageView.caloriesTv.text = it.calories.toString()
             binding.headerImageView.minutesTv.text = it.total_time.toString()
@@ -61,21 +66,25 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun initializeCalorieGraph() {
-        binding.calorieChart.setDrawBarShadow(false)
-        binding.calorieChart.setDrawValueAboveBar(true)
-        binding.calorieChart.description.isEnabled = false
-        binding.calorieChart.isHovered = false
-        binding.calorieChart.legend.isEnabled = false
+
+        binding.calorieChart.apply {
+            setDrawBarShadow(false)
+            setDrawValueAboveBar(true)
+            description.isEnabled = false
+            isHovered = false
+            legend.isEnabled = false
+            setDrawValueAboveBar(true)
+        }
 
         val xAxisFormatter: IndexAxisValueFormatter =
             CustomAxisFormatter(viewModel.caloriesBurned.value!!)
 
-        val xAxis: XAxis = binding.calorieChart.xAxis
-        xAxis.position = XAxisPosition.BOTTOM
-
-        xAxis.setDrawGridLines(false)
-        xAxis.granularity = 1f
-        xAxis.valueFormatter = xAxisFormatter
+        binding.calorieChart.xAxis.apply {
+            position = XAxisPosition.BOTTOM
+            setDrawGridLines(false)
+            granularity = 1f
+            valueFormatter = xAxisFormatter
+        }
 
 
         val rightAxis: YAxis = binding.calorieChart.axisRight
@@ -90,8 +99,6 @@ class StatisticsFragment : Fragment() {
         leftAxis.spaceTop = 15f
         leftAxis.axisMaximum = 500f
         leftAxis.axisMinimum = 0f
-
-
     }
 
     private fun initializeDurationGraph() {
@@ -112,8 +119,6 @@ class StatisticsFragment : Fragment() {
         leftAxis.setPosition(YAxisLabelPosition.OUTSIDE_CHART)
 
         binding.lineChart.axisRight.isEnabled = false
-
-
     }
 
     private fun setBarData(allEntries: List<BarEntry>) {
@@ -121,6 +126,7 @@ class StatisticsFragment : Fragment() {
             valueTextColor = Color.BLACK
         }
         binding.calorieChart.data = BarData(dataSet)
+        binding.calorieChart.setVisibleXRangeMaximum(4f)
         dataSet.setGradientColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -133,21 +139,25 @@ class StatisticsFragment : Fragment() {
     private fun setLineData(entries: List<Entry>) {
         val lineDataSet = LineDataSet(entries, "Duration Data")
         val iLineDataSet = ArrayList<ILineDataSet>(Collections.singletonList(lineDataSet))
-        lineDataSet.color = ContextCompat.getColor(requireContext(), R.color.secondaryLightColor)
-        lineDataSet.setCircleColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.secondaryDarkColor
+
+        lineDataSet.apply {
+            color = ContextCompat.getColor(requireContext(), R.color.secondaryLightColor)
+            setCircleColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.secondaryDarkColor
+                )
             )
-        )
-        lineDataSet.setDrawCircles(true)
-        lineDataSet.setDrawCircleHole(true)
-        lineDataSet.lineWidth = 5F
-        lineDataSet.circleRadius = 10F
-        lineDataSet.circleHoleRadius = 10F
-        lineDataSet.valueTextSize = 10F
-        lineDataSet.valueTextColor = Color.BLACK
+            setDrawCircles(true)
+            setDrawCircleHole(true)
+            lineWidth = 5F
+            circleRadius = 10F
+            circleHoleRadius = 10F
+            valueTextSize = 10F
+            valueTextColor = Color.BLACK
+        }
         binding.lineChart.data = LineData(iLineDataSet)
+        binding.lineChart.setVisibleXRangeMaximum(8f)
         binding.lineChart.invalidate()
     }
 }

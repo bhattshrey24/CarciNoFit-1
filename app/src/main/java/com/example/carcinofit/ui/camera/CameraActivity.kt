@@ -42,7 +42,7 @@ class CameraActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null // stores the captured Image
     private lateinit var outputDirectory: File
 
-    private var myLayoutManager: RecyclerView.LayoutManager? = null
+
     private var myAdapter: RecyclerView.Adapter<ResultAdapterClass.MyViewHolder>? = null
 
     private val binding: CameraActivityBinding by lazy {
@@ -177,7 +177,7 @@ class CameraActivity : AppCompatActivity() {
         val handler = Handler()
 
         handler.postDelayed({
-            binding.dummyConstraintView.visibility = View.VISIBLE
+            binding.statsLayout.root.visibility = View.VISIBLE
             binding.resultProgressBar.visibility = View.GONE
             Toast.makeText(
                 this@CameraActivity,
@@ -189,11 +189,11 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun setRecyclerView(dummy: Array<String>) {
-        myLayoutManager = LinearLayoutManager(this)
-        var myRecyclerView = findViewById<RecyclerView>(R.id.myResultRecyclerView)
-        myRecyclerView.layoutManager = myLayoutManager
         myAdapter = ResultAdapterClass(this, dummy)
-        myRecyclerView.adapter = myAdapter
+        binding.statsLayout.myResultRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@CameraActivity)
+            adapter = myAdapter
+        }
     }
 
 

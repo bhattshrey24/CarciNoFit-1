@@ -10,7 +10,7 @@ object Constants {
     val REQUIRED_PERMISSIONS=arrayOf(android.Manifest.permission.CAMERA)
 
     const val WORKOUT_DATABASE_NAME = "work_db"
-    const val  REQUEST_CODE_LOCATION_PERMISSION=10
+
     const val ACTION_START_OR_RESUME_SERVICE = "ACTION_START_OR_RESUME_SERVICE"
     const val ACTION_PAUSE_SERVICE = "ACTION_PAUSE_SERVICE"
     const val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"
@@ -27,17 +27,5 @@ object Constants {
     const val POLYLINE_WIDTH = 8f
     const val MAP_ZOOM = 18f
 
-    const val TIMER_UPDATE_INTERVAL=50L
-
-    const val userHeightKey="userHeightKey"
-    const val userWeightKey="userWeightKey"
-    const val userWeeklyGoal="userWeeklyGoal"
-    const val userAge="userAge"
-    const val userGender="userGender"
-    const val userRestTime="userRestTime"
-
-    val BMIcategory = arrayOf(
-        "Severely Underweight", "Underweight", "Normal",
-        "Overweight", "Obese Class I", "Obese Class II"
-    )
+    const val TIMER_UPDATE_INTERVAL = 50L
 }

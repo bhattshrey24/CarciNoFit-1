@@ -2,17 +2,13 @@ package com.example.carcinofit.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.carcinofit.R
-import com.example.carcinofit.api.viewmodel.ApiViewModel
 import com.example.carcinofit.databinding.ActivityMainBinding
 import com.example.carcinofit.other.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.example.carcinofit.ui.camera.CameraActivity
@@ -32,27 +28,18 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.findFragmentById(R.id.NavHost) as NavHostFragment
     }
 
-    private val apiViewModel: ApiViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         binding.floatingButton.setOnClickListener {
-           // Toast.makeText(applicationContext, "Floating btn Clicked", Toast.LENGTH_LONG).show()
-        val intent=Intent(this,CameraActivity::class.java)
+            // Toast.makeText(applicationContext, "Floating btn Clicked", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
 
-        apiViewModel.post.observe(
-            this,
-            {// simply observing the live data so whenever it gets notified of new data it passes it to the curly bracket '{}' where we can use it
-                Log.d("Response from api", it.toString())
-            })
-
 
         val navController = navHostFragment.navController
-
 
         binding.bottomNavigationView.setupWithNavController(navController)
         navController

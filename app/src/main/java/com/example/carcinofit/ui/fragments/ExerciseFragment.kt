@@ -12,14 +12,13 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.bumptech.glide.Glide
 import com.example.carcinofit.R
-import com.example.carcinofit.database.models.Exercise
-import com.example.carcinofit.database.models.Routine
+import com.example.carcinofit.data.local.models.Exercise
+import com.example.carcinofit.data.local.models.Routine
 import com.example.carcinofit.databinding.FragmentExerciseBinding
 import com.example.carcinofit.other.Timer
 import com.example.carcinofit.ui.viewmodels.MainViewModel
@@ -40,11 +39,15 @@ class ExerciseFragment : Fragment(), TextToSpeech.OnInitListener {
 
     private var currentExercise = 0
     private val routine: Routine? by lazy { arguments?.getParcelable("routine") }
-    private lateinit var exercises: List<Exercise>
-    private val exerciseTimer: Timer =
+    private val exercises: List<Exercise> by lazy {
+        routine?.exercises ?: listOf()
+    }
+    private val exerciseTimer: Timer by lazy {
         Timer({ item: Long -> updateExerciseTimerUi(item) }, { onExerciseFinished() })
-    private val restTimer: Timer =
+    }
+    private val restTimer: Timer by lazy {
         Timer({ item: Long -> updateRestTimerUi(item) }, { onRestFinished() })
+    }
     private var tts: TextToSpeech? = null
     private var mediaPlayer: MediaPlayer? = null
     private var duration = System.currentTimeMillis()
@@ -55,7 +58,6 @@ class ExerciseFragment : Fragment(), TextToSpeech.OnInitListener {
     ): View {
         requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding.routine = routine
-        exercises = routine?.exercises ?: listOf()
         tts = TextToSpeech(requireContext(), this)
         initializeUI()
         return binding.root
@@ -70,7 +72,7 @@ class ExerciseFragment : Fragment(), TextToSpeech.OnInitListener {
         loadGif()
         binding.exercise = exercises[currentExercise]
         binding.restRoot.visibility = View.VISIBLE
-        val max = 10
+        val max = viewModel.getRestSet()
         binding.progressBar.max = max
         binding.progressBar.progress = 0
         binding.timerTv.text = max.toString()
