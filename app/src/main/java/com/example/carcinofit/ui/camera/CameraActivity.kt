@@ -18,7 +18,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.carcinofit.R
@@ -34,17 +33,9 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.utils.ColorTemplate
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.random.Random.Default.nextInt
 
 class CameraActivity : AppCompatActivity() {
 
@@ -58,7 +49,7 @@ class CameraActivity : AppCompatActivity() {
         DataBindingUtil.inflate(layoutInflater, R.layout.camera_activity, null, false)
     }
 
-    private lateinit var pieChart:PieChart
+    private lateinit var pieChart: PieChart
 
     //private var dummyTitleLiveData= arrayOf("")
 
@@ -171,42 +162,42 @@ class CameraActivity : AppCompatActivity() {
 
         binding.resultProgressBar.visibility = View.VISIBLE
 
-        val dummyObj:ResultDataClass= ResultDataClass()
+        val dummyObj: ResultDataClass = ResultDataClass()
+        val sizeOfList = dummyObj.listOfObj.size - 1
+        val randomNum = (0..sizeOfList).random()
 
-        val randomNum = (0..dummyObj.listOfObj.size).random()
-
-        val currentObj:ResultDataClassStructure=dummyObj.listOfObj[randomNum]
+        val currentObj: ResultDataClassStructure = dummyObj.listOfObj[randomNum]
 
         pieChart = findViewById(R.id.resultPieChart);
         setupPieChart();
-        loadPieChart(currentObj.percenOfNonToxicEle,currentObj.percenOfToxicEle);
+        loadPieChart(currentObj.percenOfNonToxicEle, currentObj.percenOfToxicEle);
 
         setRecyclerView(currentObj.listOfToxicEle)
 
         val handler = Handler()
 
         handler.postDelayed({
-            binding.dummyConstraintView.visibility=View.VISIBLE
+            binding.dummyConstraintView.visibility = View.VISIBLE
             binding.resultProgressBar.visibility = View.GONE
             Toast.makeText(
                 this@CameraActivity,
                 "Response Received",
                 Toast.LENGTH_SHORT
             ).show()
-        },currentObj.delay)
+        }, currentObj.delay)
 
     }
 
-    private fun setRecyclerView(dummy:Array<String>) {
+    private fun setRecyclerView(dummy: Array<String>) {
         myLayoutManager = LinearLayoutManager(this)
         var myRecyclerView = findViewById<RecyclerView>(R.id.myResultRecyclerView)
         myRecyclerView.layoutManager = myLayoutManager
-        myAdapter = ResultAdapterClass(this,dummy)
+        myAdapter = ResultAdapterClass(this, dummy)
         myRecyclerView.adapter = myAdapter
     }
 
 
-    private fun loadPieChart(percentageOfNonToxicEle:Float,percentageOfToxicEle:Float) {
+    private fun loadPieChart(percentageOfNonToxicEle: Float, percentageOfToxicEle: Float) {
         val entries: ArrayList<PieEntry> = ArrayList()
         entries.add(PieEntry(percentageOfNonToxicEle, "Non Toxic Elements"))
         entries.add(PieEntry(percentageOfToxicEle, "Toxic Elements"))
