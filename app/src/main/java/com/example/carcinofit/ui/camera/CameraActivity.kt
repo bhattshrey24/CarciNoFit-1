@@ -127,21 +127,30 @@ class CameraActivity : AppCompatActivity() {
                     binding.btnPhotoAccepted.visibility = View.VISIBLE
 
                     binding.btnPhotoAccepted.setOnClickListener {
-                        Toast.makeText(
-                            this@CameraActivity,
-                            "Sending to server for response",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        gettingResponse()
+//                        Toast.makeText(
+//                            this@CameraActivity,
+//                            "Sending to server for response",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
 
+                        val actionString:String="prod1"
+                        gettingResponse(actionString)
                     }
 
                     binding.btnAgainTakePhoto.setOnClickListener {
                         binding.viewFinder.visibility = View.VISIBLE
                         binding.myImageView.visibility = View.GONE
                         //startCamera()
+
+                        val actionString:String="Not Found"
+                        gettingResponse(actionString)
                     }
 
+                    binding.backButton.setOnClickListener{
+
+                        val actionString:String="prod2"
+                        gettingResponse(actionString)
+                    }
 
                 }
 
@@ -152,42 +161,70 @@ class CameraActivity : AppCompatActivity() {
         )
     }
 
-    private fun gettingResponse() {
-
+    private fun gettingResponse(actionString:String) {
         binding.myImageView.visibility = View.GONE
         binding.viewFinder.visibility = View.GONE
         binding.btnTakePhoto.visibility = View.GONE
         binding.btnAgainTakePhoto.visibility = View.GONE
         binding.btnPhotoAccepted.visibility = View.GONE
-
         binding.resultProgressBar.visibility = View.VISIBLE
 
         val dummyObj: ResultDataClass = ResultDataClass()
-        val sizeOfList = dummyObj.listOfObj.size - 1
-        val randomNum = (0..sizeOfList).random()
-
-        val currentObj: ResultDataClassStructure = dummyObj.listOfObj[randomNum]
-
         pieChart = findViewById(R.id.resultPieChart);
         setupPieChart();
-        loadPieChart(currentObj.percenOfNonToxicEle, currentObj.percenOfToxicEle);
 
-        setRecyclerView(currentObj.listOfToxicEle)
+        if(actionString=="prod1"){
 
-        val handler = Handler()
+            val sizeOfList = dummyObj.listOfObjOfProd1.size - 1
+            val randomNum = (0..sizeOfList).random()
+            val currentObj: ResultDataClassStructure = dummyObj.listOfObjOfProd1[randomNum]
 
-        handler.postDelayed({
-            binding.statsLayout.root.visibility = View.VISIBLE
-            binding.resultProgressBar.visibility = View.GONE
-            Toast.makeText(
-                this@CameraActivity,
-                "Response Received",
-                Toast.LENGTH_SHORT
-            ).show()
-        }, currentObj.delay)
+            loadPieChart(currentObj.percenOfNonToxicEle, currentObj.percenOfToxicEle);
+            setRecyclerView(currentObj.listOfToxicEle)
+            val handler = Handler()
+            handler.postDelayed({
+                binding.statsLayout.root.visibility = View.VISIBLE
+                binding.resultProgressBar.visibility = View.GONE
 
+            }, currentObj.delay)
+
+        }else if(actionString=="prod2"){
+
+            val sizeOfList = dummyObj.listOfObjOfProd2.size - 1
+            val randomNum = (0..sizeOfList).random()
+            val currentObj: ResultDataClassStructure = dummyObj.listOfObjOfProd2[randomNum]
+
+            loadPieChart(currentObj.percenOfNonToxicEle, currentObj.percenOfToxicEle);
+            setRecyclerView(currentObj.listOfToxicEle)
+
+            val handler = Handler()
+            handler.postDelayed({
+                binding.statsLayout.root.visibility = View.VISIBLE
+                binding.resultProgressBar.visibility = View.GONE
+            }, currentObj.delay)
+
+        }else{// not found case
+            val sizeOfList = dummyObj.listOfObjOfNF.size - 1
+            val randomNum = (0..sizeOfList).random()
+            val currentObj: ResultDataClassStructure = dummyObj.listOfObjOfNF[randomNum]
+
+            loadPieChart(currentObj.percenOfNonToxicEle, currentObj.percenOfToxicEle);
+            setRecyclerView(currentObj.listOfToxicEle)
+
+            val handler = Handler()
+
+            handler.postDelayed({
+                binding.statsLayout.root.visibility = View.VISIBLE
+                binding.resultProgressBar.visibility = View.GONE
+            }, currentObj.delay)
+        }
     }
 
+    //            Toast.makeText(
+//                this@CameraActivity,
+//                "Response Received",
+//                Toast.LENGTH_SHORT
+//            ).show()
     private fun setRecyclerView(dummy: Array<String>) {
         myAdapter = ResultAdapterClass(this, dummy)
         binding.statsLayout.myResultRecyclerView.apply {
