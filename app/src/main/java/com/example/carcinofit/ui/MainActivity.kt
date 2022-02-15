@@ -14,40 +14,38 @@ import com.example.carcinofit.other.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.example.carcinofit.ui.camera.CameraActivity
 import dagger.hilt.android.AndroidEntryPoint
 
-//todo
-// either improve dummy using random or use firebase ML kit and it will give u the text and from that simply put all 800 chemicals in a file and and simply search in the file to match components , like first seperate them on basis of ',' and then simply one by one find them in the list
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val binding: ActivityMainBinding by lazy {
+    private val binding: ActivityMainBinding by lazy {//this is lazy initialization
         DataBindingUtil.inflate(layoutInflater, R.layout.activity_main, null, false)
     }
 
-    private val navHostFragment: NavHostFragment by lazy {
-        supportFragmentManager.findFragmentById(R.id.NavHost) as NavHostFragment
+    private val navHostFragment: NavHostFragment by lazy { // basically initializing our navigation host manager
+        supportFragmentManager.findFragmentById(R.id.NavHost) as NavHostFragment // supportFragmentManager basically gives us the Fragment manager
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.floatingButton.setOnClickListener {
+        binding.floatingButton.setOnClickListener { // The floating action button in the middle of bottom tab
             // Toast.makeText(applicationContext, "Floating btn Clicked", Toast.LENGTH_LONG).show()
             val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
 
-
         val navController = navHostFragment.navController
 
+
         binding.bottomNavigationView.setupWithNavController(navController)
-        navController
+        navController // just setting up basic navigation
             .addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
                     R.id.profileFragment, R.id.homeFragment, R.id.statisticsFragment, R.id.historyFragment -> {
                         binding.bottomNavigationView.visibility = View.VISIBLE
-                        binding.bottomAppBar.visibility = View.VISIBLE
+                        binding.bottomAppBar.visibility = View.VISIBLE // visible again cause its possible that we navigate from another activity in which case the 'else' case would have been triggerd and appbar would have been made invisible
                         binding.floatingButton.visibility = View.VISIBLE
                     }
                     else -> {
@@ -59,13 +57,13 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent?) {//D, this is related to notification , like if user finished running and our app is in foreground and then user taps on notification to see how much he ran and to see the distance he covered in map then navigate them to the tracking screen
         super.onNewIntent(intent)
         navigateToTrackingFragmentIfNeeded(intent)
     }
 
     private fun navigateToTrackingFragmentIfNeeded(intent: Intent?) {
-        if (intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
+        if (intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {// D, basically we are telling intent what to do , we basically created our custom action ie. ACTION_SHOW_TRACKING_FRAGMENT
             navHostFragment.findNavController().navigate(R.id.action_global_trackingFragment)
         }
     }

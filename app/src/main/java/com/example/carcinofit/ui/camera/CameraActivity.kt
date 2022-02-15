@@ -37,7 +37,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CameraActivity : AppCompatActivity() {
+class CameraActivity : AppCompatActivity() { // Using CameraX
 
     private var imageCapture: ImageCapture? = null // stores the captured Image
     private lateinit var outputDirectory: File
